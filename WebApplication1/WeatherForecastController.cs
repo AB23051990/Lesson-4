@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace MetricsManager.Controllers
 {   /// Напишите собственный контроллер и методы в нём, которые бы предоставляли следующую функциональность:
@@ -15,7 +14,7 @@ namespace MetricsManager.Controllers
         private DateTime _Date;
         public int TemperatureC1 { get => _TemperatureC; set => _TemperatureC = value; }
         public DateTime Date1 { get => _Date; set => _Date = value; }
-        
+
         /*
         public WeatherForecastController(int TemperatureC)
         {_TemperatureC = TemperatureC;}
@@ -33,7 +32,7 @@ namespace MetricsManager.Controllers
 
         [HttpPost, Route("save")]
         public string Save()
-        {            
+        {
             var rng = new Random();
             _TemperatureC = rng.Next(-25, 55);
             _Date = DateTime.Now;
@@ -46,18 +45,18 @@ namespace MetricsManager.Controllers
             _TemperatureC = a;
             return $"смена температуры на [{_TemperatureC}]℃ в [{_Date}]";
         }
-        
+
         [HttpDelete, Route("Delete")]
         public string Delete()
         {
             _TemperatureC = 0;
             return $"смена температуры на [{_TemperatureC}]℃ в [{_Date}]";
         }
-        
+
         [HttpGet, Route("statistic")]
         public string Statistic()
         {
             return $"текущее значение температуры [{_TemperatureC}]℃ в [{_Date}]";
         }
-    }  
+    }
 }
