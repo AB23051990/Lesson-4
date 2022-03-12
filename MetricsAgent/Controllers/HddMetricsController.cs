@@ -1,4 +1,5 @@
-﻿using MetricsAgent.DAL;
+﻿using AutoMapper;
+using MetricsAgent.DAL;
 using MetricsAgent.Requests;
 using MetricsAgent.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -8,37 +9,25 @@ namespace MetricsAgent.Controllers
     [ApiController]
     public class HddMetricsController : ControllerBase
     {
-        private IHddMetricsRepository repository;
-        public HddMetricsController(IHddMetricsRepository repository)
+        private readonly IHddMetricsRepository repository;
+        private readonly IMapper mapper;
+        public HddMetricsController(IHddMetricsRepository repository, IMapper
+        mapper)
         {
             this.repository = repository;
-        }
-        [HttpPost("create")]
-        public IActionResult Create([FromBody] HddMetricCreateRequest request)
-        {
-            repository.Create(new HddMetric
-            {
-                Time = request.Time,
-                Value = request.Value
-            });
-            return Ok();
+            this.mapper = mapper;
         }
         [HttpGet("all")]
         public IActionResult GetAll()
         {
-            var metrics = repository.GetAll();
+            IList<HddMetric> metrics = repository.GetAll();
             var response = new AllHddMetricsResponse()
             {
                 Metrics = new List<HddMetricDto>()
             };
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new HddMetricDto
-                {
-                    Time = metric.Time,
-                    Value = metric.Value,
-                    Id = metric.Id
-                });
+                response.Metrics.Add(mapper.Map<HddMetricDto>(metric));
             }
             return Ok(response);
         }

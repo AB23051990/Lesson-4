@@ -1,4 +1,5 @@
-﻿using MetricsAgent.DAL;
+﻿using AutoMapper;
+using MetricsAgent.DAL;
 using MetricsAgent.Requests;
 using MetricsAgent.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -8,37 +9,25 @@ namespace MetricsAgent.Controllers
     [ApiController]
     public class NetworkMetricsController : ControllerBase
     {
-        private INetworkMetricsRepository repository;
-        public NetworkMetricsController(INetworkMetricsRepository repository)
+        private readonly INetworkMetricsRepository repository;
+        private readonly IMapper mapper;
+        public NetworkMetricsController(INetworkMetricsRepository repository, IMapper
+        mapper)
         {
             this.repository = repository;
-        }
-        [HttpPost("create")]
-        public IActionResult Create([FromBody] NetworkMetricCreateRequest request)
-        {
-            repository.Create(new NetworkMetric
-            {
-                Time = request.Time,
-                Value = request.Value
-            });
-            return Ok();
+            this.mapper = mapper;
         }
         [HttpGet("all")]
         public IActionResult GetAll()
         {
-            var metrics = repository.GetAll();
+            IList<NetworkMetric> metrics = repository.GetAll();
             var response = new AllNetworkMetricsResponse()
             {
                 Metrics = new List<NetworkMetricDto>()
             };
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new NetworkMetricDto
-                {
-                    Time = metric.Time,
-                    Value = metric.Value,
-                    Id = metric.Id
-                });
+                response.Metrics.Add(mapper.Map<NetworkMetricDto>(metric));
             }
             return Ok(response);
         }

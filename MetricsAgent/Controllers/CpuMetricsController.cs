@@ -1,5 +1,5 @@
-﻿using MetricsAgent.DAL;
-using MetricsAgent.Requests;
+﻿using AutoMapper;
+using MetricsAgent.DAL;
 using MetricsAgent.Responses;
 using Microsoft.AspNetCore.Mvc;
 namespace MetricsAgent.Controllers
@@ -8,37 +8,25 @@ namespace MetricsAgent.Controllers
     [ApiController]
     public class CpuMetricsController : ControllerBase
     {
-        private ICpuMetricsRepository repository;
-        public CpuMetricsController(ICpuMetricsRepository repository)
+        private readonly ICpuMetricsRepository repository;
+        private readonly IMapper mapper;
+        public CpuMetricsController(ICpuMetricsRepository repository, IMapper
+        mapper)
         {
             this.repository = repository;
-        }
-        [HttpPost("create")]
-        public IActionResult Create([FromBody] CpuMetricCreateRequest request)
-        {
-            repository.Create(new CpuMetric
-            {
-                Time = request.Time,
-                Value = request.Value
-            });
-            return Ok();
+            this.mapper = mapper;
         }
         [HttpGet("all")]
         public IActionResult GetAll()
         {
-            var metrics = repository.GetAll();
+            IList<CpuMetric> metrics = repository.GetAll();
             var response = new AllCpuMetricsResponse()
             {
                 Metrics = new List<CpuMetricDto>()
             };
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new CpuMetricDto
-                {
-                    Time = metric.Time,
-                    Value = metric.Value,
-                    Id = metric.Id
-                });
+                response.Metrics.Add(mapper.Map<CpuMetricDto>(metric));
             }
             return Ok(response);
         }
