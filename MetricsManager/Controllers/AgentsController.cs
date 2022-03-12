@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HW2.Controllers
+namespace MetricsManager.Controllers
 {
     [Route("api/agents/register")]
     [ApiController]
