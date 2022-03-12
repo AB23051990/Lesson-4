@@ -1,4 +1,5 @@
-﻿using MetricsAgent.DAL;
+﻿using AutoMapper;
+using MetricsAgent.DAL;
 using MetricsAgent.Requests;
 using MetricsAgent.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -8,37 +9,25 @@ namespace MetricsAgent.Controllers
     [ApiController]
     public class RamMetricsController : ControllerBase
     {
-        private IRamMetricsRepository repository;
-        public RamMetricsController(IRamMetricsRepository repository)
+        private readonly IRamMetricsRepository repository;
+        private readonly IMapper mapper;
+        public RamMetricsController(IRamMetricsRepository repository, IMapper
+        mapper)
         {
             this.repository = repository;
-        }
-        [HttpPost("create")]
-        public IActionResult Create([FromBody] RamMetricCreateRequest request)
-        {
-            repository.Create(new RamMetric
-            {
-                Time = request.Time,
-                Value = request.Value
-            });
-            return Ok();
+            this.mapper = mapper;
         }
         [HttpGet("all")]
         public IActionResult GetAll()
         {
-            var metrics = repository.GetAll();
+            IList<RamMetric> metrics = repository.GetAll();
             var response = new AllRamMetricsResponse()
             {
                 Metrics = new List<RamMetricDto>()
             };
             foreach (var metric in metrics)
             {
-                response.Metrics.Add(new RamMetricDto
-                {
-                    Time = metric.Time,
-                    Value = metric.Value,
-                    Id = metric.Id
-                });
+                response.Metrics.Add(mapper.Map<RamMetricDto>(metric));
             }
             return Ok(response);
         }

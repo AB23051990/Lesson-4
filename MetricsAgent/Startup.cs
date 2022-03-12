@@ -1,3 +1,4 @@
+using AutoMapper;
 using MetricsAgent.DAL;
 using System.Data.SQLite;
 
@@ -16,6 +17,9 @@ namespace MetricsAgent
             services.AddControllers();
             ConfigureSqlLiteConnection(services);
             services.AddScoped<ICpuMetricsRepository, CpuMetricsRepository>();
+            var mapperConfiguration = new MapperConfiguration(mp => mp.AddProfile(new MapperProfile()));
+            var mapper = mapperConfiguration.CreateMapper();
+            services.AddSingleton(mapper);
         }
         private void ConfigureSqlLiteConnection(IServiceCollection services)
         {
