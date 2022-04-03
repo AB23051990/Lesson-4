@@ -28,8 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Responses\" />
-    <Folder Include="Requests\" />
+    <ProjectReference Include="..\MetricsAgent\MetricsAgent.csproj" />
   </ItemGroup>
 
 </Project>

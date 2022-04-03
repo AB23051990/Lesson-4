@@ -1,5 +1,4 @@
-﻿using MetricsManager.Responses;
-using MetricsManager.Requests;
+﻿/*
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net.Http;
@@ -103,7 +102,7 @@ namespace MetricsManager.Client
         return null;
 }
 }
-
+*/
 
 
 
