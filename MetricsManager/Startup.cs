@@ -1,5 +1,4 @@
-﻿using MetricsManager.Client;
-using Polly;
+﻿using Polly;
 
 namespace MetricsManager
 {
@@ -15,7 +14,7 @@ namespace MetricsManager
         {
             services.AddControllers();
 
-            services.AddHttpClient<IMetricsAgentClient,MetricsAgentClient>().AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _=> TimeSpan.FromMilliseconds(1000)));
+            //services.AddHttpClient<IMetricsAgentClient,MetricsAgentClient>().AddTransientHttpErrorPolicy(p => p.WaitAndRetryAsync(3, _=> TimeSpan.FromMilliseconds(1000)));
         }
         // Этот метод вызывается средой выполнения. Используйте этот метод для настройки конвейера HTTP-запросов.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
